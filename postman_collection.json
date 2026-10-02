@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "recruit-x-api-collection-v1",
+    "name": "RECRUIT X — AI Mock Interview Platform API Collection",
+    "description": "Complete Postman collection for RECRUIT X API endpoints including Question Generation, Answer Evaluation, Feedback Generation, Session Management, and Error Validations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Interview Lifecycle",
+      "item": [
+        {
+          "name": "POST Start Interview (200 OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"demo-user-123\",\n  \"type\": \"Technical Interview\",\n  \"topic\": \"Java & OOP\",\n  \"difficulty\": \"Medium\",\n  \"totalQuestions\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "start"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Generate Question (200 OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Data Structures & Algorithms\",\n  \"difficulty\": \"Hard\",\n  \"count\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/question",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "question"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Evaluate Answer (200 OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What is the difference between an interface and an abstract class in Java?\",\n  \"answer\": \"An interface provides a contract with default methods in Java 8+, whereas an abstract class can hold instance variables and constructors.\",\n  \"topic\": \"Java & OOP\",\n  \"difficulty\": \"Medium\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/evaluate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "evaluate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Generate Full Feedback (200 OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session\": {\n    \"id\": \"test-session-101\",\n    \"userId\": \"user-123\",\n    \"type\": \"Technical Interview\",\n    \"topic\": \"React.js\",\n    \"difficulty\": \"Medium\",\n    \"totalQuestions\": 1,\n    \"currentQuestionIndex\": 0,\n    \"status\": \"completed\",\n    \"questions\": [\n      {\n        \"id\": \"q1\",\n        \"order\": 1,\n        \"question\": \"Explain React Fiber architecture.\",\n        \"category\": \"React\",\n        \"difficulty\": \"Medium\"\n      }\n    ],\n    \"answers\": [\n      {\n        \"id\": \"a1\",\n        \"interviewId\": \"test-session-101\",\n        \"questionId\": \"q1\",\n        \"questionText\": \"Explain React Fiber architecture.\",\n        \"transcript\": \"Fiber is React's reconciliation engine that enables incremental rendering and prioritization.\",\n        \"answeredAt\": \"2026-10-02T10:00:00Z\"\n      }\n    ],\n    \"transcript\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "feedback"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Single Interview by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/demo-session-1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "demo-session-1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET User Interviews List",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/interviews?userId=demo-user-123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interviews"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "demo-user-123"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Validation & Error Handling",
+      "item": [
+        {
+          "name": "POST Start Interview - Missing Required Fields (400 Bad Request)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"demo-user-123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "start"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Evaluate - Missing Answer (400 Bad Request)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Explain TCP vs UDP.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/interview/evaluate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "interview", "evaluate"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

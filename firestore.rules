@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // User Profiles: Only the authenticated user can read & write their own profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Interviews: Users can only read, create, and modify their own interviews
+    match /interviews/{interviewId} {
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Questions subcollection or root questions
+    match /questions/{questionId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Candidate Answers
+    match /answers/{answerId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Detailed Feedback Reports: User can only access feedback associated with their own interviews
+    match /feedback/{feedbackId} {
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.userId == null
+      );
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
